@@ -4,6 +4,8 @@ import { Card, CardContent, MenuItem,Select} from '@mui/material';
 import { useEffect, useState } from 'react';
 import InfoBox from './InfoBox';
 import Map from './Map';
+import Table from './Table';
+import { sortData } from './utils';
 //https://disease.sh/v3/covid-19/countries
 
 function App() {
@@ -29,7 +31,8 @@ function App() {
             value:country.countryInfo.iso2,
         })
         );
-        setTableData(data);
+        const sortedData=sortData(data);
+        setTableData(sortedData);
         setCountries(countries);
       })
     }
@@ -91,12 +94,12 @@ console.log("countryInfo",countryInfo);
        />
      </div>
         <Map/>
-     </div>
+     </div> 
         
         <Card className="app_right">
           <CardContent>
              <h3>Live cases by country</h3>
-             <table countriea={tableData}/>
+             <Table countries={tableData}/>
              <h3>Worldwide new cases</h3>
           </CardContent>
         </Card>
