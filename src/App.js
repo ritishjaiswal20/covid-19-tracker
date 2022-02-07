@@ -6,6 +6,7 @@ import InfoBox from './InfoBox';
 import Map from './Map';
 import Table from './Table';
 import { sortData } from './utils';
+import LineGraph from './LineGraph';
 //https://disease.sh/v3/covid-19/countries
 
 function App() {
@@ -101,6 +102,7 @@ console.log("countryInfo",countryInfo);
              <h3>Live cases by country</h3>
              <Table countries={tableData}/>
              <h3>Worldwide new cases</h3>
+             <LineGraph/>
           </CardContent>
         </Card>
 
