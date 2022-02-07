@@ -4,6 +4,7 @@ import './InfoBox.css';
 function InfoBox({title,cases,total}) {
   return (
   <Card className="infoBox">
+   <div className="infoBox_con">
      
      <cardContent>
         
@@ -18,6 +19,8 @@ function InfoBox({title,cases,total}) {
         </Typography>
 
      </cardContent>
+     
+     </div>
   </Card>
   );
 }

@@ -9,6 +9,15 @@ import Map from './Map';
 function App() {
   const[countries,setCountries]=useState([]);
   const[country,setCountry]=useState("world wide")
+  const[countryInfo,setCountryInfo]=useState({});
+  const[tableData, setTableData]=useState([]);
+  useEffect(()=>{
+    fetch("https://disease.sh/v3/covid-19/all")
+    .then(response=>response.json())
+    .then((data)=>{
+      setCountryInfo(data);
+  });
+},[]);
   useEffect(()=>{
     const getCountriesData= async () =>{
       await fetch("https://disease.sh/v3/covid-19/countries")
@@ -20,6 +29,7 @@ function App() {
             value:country.countryInfo.iso2,
         })
         );
+        setTableData(data);
         setCountries(countries);
       })
     }
@@ -28,16 +38,32 @@ function App() {
 
   const onCountryChange = async (event)=>{
     const countryCode= event.target.value;
-    console.log("country-code--",countryCode);
     setCountry(countryCode);
-  }
+
+    
+    const url = countryCode === "Worldwide" ? "https://disease.sh/v3/covid-19/all"
+    : `https://disease.sh/v3/covid-19/countries/${countryCode}`;
+
+
+    await fetch(url)
+    .then(response =>response.json())
+    .then(data =>{
+      setCountry(countryCode);
+
+      // all of the data 
+      //from th country response
+      setCountryInfo(data);
+    });
+  
+  };
+console.log("countryInfo",countryInfo);
   return (
     <div className="app">
  
     <div className="app_left">
       
      <div className="app_header">
-      <h1>covid 19 tracker</h1>
+      <h1>Covid 19 tracker</h1>
       <FormControl>
          <Select variant="outlined" onChange={onCountryChange} value={country}>
          <MenuItem value="World-wide">Worldwide</MenuItem>
@@ -51,26 +77,28 @@ function App() {
       </div>
      <div className="app_stats">
        <InfoBox title="CorornaVirus cases"
-       total={3000}
-       cases={123}
+        cases={countryInfo.todayCases}
+       total={countryInfo.cases}
+      
        />
        <InfoBox title="Recovery"
-       total={2000}
-       cases={345}
+       total={countryInfo.recovered}
+       cases={countryInfo.todayRecovered}
        />
        <InfoBox title="Deaths"
-       total={4000}
-       cases={133}
+       total={countryInfo.deaths}
+       cases={countryInfo.todayDeaths}
        />
      </div>
         <Map/>
      </div>
         
-       <Card className="app_right">
-         <CardContent>
+        <Card className="app_right">
+          <CardContent>
              <h3>Live cases by country</h3>
+             <table countriea={tableData}/>
              <h3>Worldwide new cases</h3>
-         </CardContent>
+          </CardContent>
         </Card>
 
 
